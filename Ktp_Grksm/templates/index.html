@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kütüphane Yönetim Sistemi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">📚 Kütüphane Yönetim Sistemi</h1>
+            <p class="lead">Kitaplarınızı kolayca ekleyin, arayın ve yönetin!</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div>
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- kitap ekle frm -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Kitap Ekle</h5>
+            </div>
+            <div class="card-body">
+                <form action="/ekle" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="ad" class="form-label">Kitap Adı:</label>
+                            <input type="text" class="form-control" id="ad" name="ad" placeholder="Kitap adı girin" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="yazar" class="form-label">Yazar:</label>
+                            <input type="text" class="form-control" id="yazar" name="yazar" placeholder="Yazar adı girin" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="yayin_yili" class="form-label">Yayın Yılı:</label>
+                            <input type="number" class="form-control" id="yayin_yili" name="yayin_yili" placeholder="Yıl Girin" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">➕ Kitap Ekle</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ktp ara frm -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Kitap Ara</h5>
+            </div>
+            <div class="card-body">
+                <form action="/ara" method="post">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="arama" name="arama" placeholder="Kitap adı veya yazarı girin" required>
+                        <button type="submit" class="btn btn-primary">🔍 Ara</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- aran ktp -->
+        {% if aranan_kitap %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-warning text-white">
+                <h5 class="mb-0">Aranan Kitap</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ aranan_kitap.ad }}</strong><br>
+                        <small>{{ aranan_kitap.yazar }} - {{ aranan_kitap.yayin_yili }}</small>
+                    </div>
+                    <a href="/sil/{{ aranan_kitap.ad }}" class="btn btn-danger btn-sm">Sil</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- tum ktp list -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Tüm Kitaplar</h5>
+            </div>
+            <div class="card-body">
+                {% if kitaplar %}
+                <ul class="list-group">
+                    {% for kitap in kitaplar %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold">{{ kitap.ad }}</span> <br>
+                            <small>{{ kitap.yazar }} - {{ kitap.yayin_yili }}</small>
+                        </div>
+                        <a href="/sil/{{ kitap.ad }}" class="btn btn-danger btn-sm">❌ Sil</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted text-center">Henüz eklenmiş bir kitap yok.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <a href="javascript:void(0)" onclick="confirmExit()" class="btn btn-danger">Çıkış</a>
+
+<script>
+    function confirmExit() {
+        if (confirm("Çıkmak istediğinizden emin misiniz?")) {
+            window.close();
+        }
+    }
+</script>
+
+</body>
+</html>
